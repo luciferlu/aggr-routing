@@ -73,13 +73,17 @@ object AggregationRouter {
 }
 
 @SerialVersionUID(1L)
-final case class FireAndForget(message: AnyRef) extends RouterEnvelope
+final case class FireAndForget(message: Any) extends RouterEnvelope
 
 @SerialVersionUID(1L)
-final case class ReliableMessage(message: AnyRef, withIn: FiniteDuration = 2 seconds, maxFork: Int = 2) extends RouterEnvelope
+final case class ReliableMessage(message: Any, withIn: FiniteDuration = 2 seconds, maxFork: Int = 2) extends RouterEnvelope
 
 @SerialVersionUID(1L)
-final case class ParallelMessage(message: Iterable[AnyRef], withIn: FiniteDuration = 2 seconds, maxFork: Int = 1) extends RouterEnvelope
+final case class ParallelMessage(message: Iterable[Any], withIn: FiniteDuration = 2 seconds, maxFork: Int = 1) extends RouterEnvelope{
+  def this(message: java.lang.Iterable[Any], withIn: FiniteDuration, maxFork: Int){
+    this(immutableSeq(message), withIn, maxFork)
+  }
+}
 
 case class AggregationRouter(config: Config)
     extends RouterConfig with AggregationLike {
@@ -156,13 +160,13 @@ trait AggregationLike { this: RouterConfig ⇒
     }
 
     def reliableDestination(sender: ActorRef,
-                            message: AnyRef,
+                            message: Any,
                             withIn: FiniteDuration,
                             maxFork: Int): immutable.Iterable[Destination] =
       Destination(sender, createReliableActor(context, withIn, getNext(maxFork))) :: Nil
 
     def paralleDestination(sender: ActorRef,
-                           messages: Iterable[AnyRef],
+                           messages: Iterable[Any],
                            withIn: FiniteDuration,
                            maxFork: Int): immutable.Iterable[Destination] =
       Destination(sender,

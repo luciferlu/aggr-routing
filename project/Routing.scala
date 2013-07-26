@@ -35,6 +35,12 @@ object AkkaStudy extends Build {
     base = file("."),
     settings = defaultSettings ++ Seq(
       libraryDependencies ++= Dependencies.aggrRouting))
+
+  lazy val simpleSample = Project(
+    id = "simple-sample",
+    base = file("sample/simple"),
+    settings = defaultSettings ++ Seq(
+      libraryDependencies ++= Dependencies.simpleSample)).dependsOn(aggrRouting)
 }
 
 object Dependencies {
@@ -66,4 +72,5 @@ object Dependencies {
   import Compile._
 
   val aggrRouting = Seq(actor, akkaSlf4j, logback, Test.scalatest, Test.testkit, Test.junit)
+  val simpleSample = Seq(actor, akkaSlf4j, logback, config)
 }

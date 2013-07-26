@@ -1,7 +1,5 @@
-
 .classpath
-
 .project
-
+.cache
 .settings/
 target/

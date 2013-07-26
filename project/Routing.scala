@@ -54,6 +54,7 @@ object Dependencies {
     // Test
 
     object Test {
+      val testkit = "com.typesafe.akka" %% "akka-testkit" % "2.2.0" % "test" // ApacheV2
       val junit = "junit" % "junit" % "4.10" % "test" // Common Public License 1.0
       val mockito = "org.mockito" % "mockito-all" % "1.8.1" % "test" // MIT
       val scalatest = "org.scalatest" %% "scalatest" % "1.9.1" % "test" // ApacheV2
@@ -64,5 +65,5 @@ object Dependencies {
 
   import Compile._
 
-  val aggrRouting = Seq(actor, akkaSlf4j, logback)
+  val aggrRouting = Seq(actor, akkaSlf4j, logback, Test.scalatest, Test.testkit, Test.junit)
 }

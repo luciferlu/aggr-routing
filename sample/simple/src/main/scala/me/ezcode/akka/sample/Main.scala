@@ -2,6 +2,7 @@ package me.ezcode.akka.sample
 
 import scala.language.postfixOps
 
+import scala.concurrent.Future
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
@@ -25,9 +26,9 @@ object Main extends App {
     }
   }).withRouter(FromConfig), "aggr-router")
 
-  val f = routerRef ? ParallelMessage("hello", maxFork = 2)
+  val f = (routerRef ? ParallelMessage("hello", maxFork = 2)).asInstanceOf[Future[Iterable[Char]]]
   val result = Await.result(f, 5 seconds)
-  println("Final Result: " + result.asInstanceOf[Iterable[Char]].mkString)
+  println("Final Result: " + result.mkString)
   system.shutdown()
   system.awaitTermination()
 }

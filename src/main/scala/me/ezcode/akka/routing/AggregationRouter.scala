@@ -79,10 +79,17 @@ final case class FireAndForget(message: Any) extends RouterEnvelope
 final case class ReliableMessage(message: Any, withIn: FiniteDuration = 2 seconds, maxFork: Int = 2) extends RouterEnvelope
 
 @SerialVersionUID(1L)
-final case class ParallelMessage(message: Iterable[Any], withIn: FiniteDuration = 2 seconds, maxFork: Int = 1) extends RouterEnvelope{
-  def this(message: java.lang.Iterable[Any], withIn: FiniteDuration, maxFork: Int){
-    this(immutableSeq(message), withIn, maxFork)
+final case class ParallelMessage[T](message: Iterable[T], withIn: FiniteDuration = 2 seconds, maxFork: Int = 1) extends RouterEnvelope{
+  //Java API
+  def this(message: java.lang.Iterable[T], withIn: String, maxFork: Int) {
+    this(immutableSeq(message), Duration(withIn).asInstanceOf[FiniteDuration], maxFork)
   }
+
+  def this(message: java.lang.Iterable[T], withIn: String) =
+    this(immutableSeq(message), withIn = Duration(withIn).asInstanceOf[FiniteDuration])
+
+  def this(message: java.lang.Iterable[T], maxFork: Int) =
+    this(immutableSeq(message), maxFork = maxFork)
 }
 
 case class AggregationRouter(config: Config)

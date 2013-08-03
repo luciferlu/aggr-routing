@@ -162,6 +162,7 @@ trait AggregationLike { this: RouterConfig ⇒
 
     def getNext(maxNr: Int = 1): Iterable[ActorRef] = {
       val currentRoutees = routeeProvider.routees
+      println(currentRoutees.size)
       if (currentRoutees.isEmpty) context.system.deadLetters :: Nil
       else fisherYatesShuffle(currentRoutees).slice(0, maxNr)
     }

@@ -34,6 +34,7 @@ object AkkaStudy extends Build {
     id = "aggr-routing",
     base = file("."),
     settings = defaultSettings ++ Seq(
+      exportJars := true,
       libraryDependencies ++= Dependencies.aggrRouting))
 
   lazy val simpleSample = Project(
